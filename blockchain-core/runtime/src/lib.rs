@@ -20,7 +20,7 @@ use polkadot_sdk::frame_support::{
     traits::{ConstU128, ConstU16, ConstU32, ConstU64, Everything},
 };
 
-// CORREÇÃO CRÍTICA PARA E0599 (stable2412)
+// CORREÇÃO: Importação necessária para o SDK stable2412
 use polkadot_sdk::frame_executive::traits::ExecuteBlock;
 
 pub use pallet_reputation;
