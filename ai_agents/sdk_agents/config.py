@@ -14,8 +14,8 @@ class Config:
     KEEP_ALIVE_INTERVAL = 120   # 2 min
     
     # Paths
-    DOCS_PATH = "../docs/internal/error-tracker"
-    MEMORY_PATH = "sdk_agents/errors_memory.json"
+    DOCS_PATH = "/Users/nunocunha/Documents/GitHub/MMECO/docs/internal/error-tracker"
+    MEMORY_PATH = "/Users/nunocunha/Documents/GitHub/MMECO/ai_agents/sdk_agents/errors_memory.json"
     LOGS_PATH = "logs"
     DAO_MEMORY_FILE = "dao_memory.json"  # ✅ ADICIONADO
     

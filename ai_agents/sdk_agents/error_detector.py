@@ -20,7 +20,7 @@ class ErrorDetector:
             # Buscar último build
             result = subprocess.run(
                 ['gh', 'run', 'list', '--limit', '1', '--workflow', 'rust.yml', '--json', 'databaseId,conclusion,status'],
-                capture_output=True, text=True, timeout=10, cwd='/workspaces/MMECO'
+                capture_output=True, text=True, timeout=10, cwd='/Users/nunocunha/Documents/GitHub/MMECO'
             )
             
             if result.returncode != 0:
@@ -67,7 +67,7 @@ class ErrorDetector:
             # Buscar logs
             result = subprocess.run(
                 ['gh', 'run', 'view', str(run_id), '--log'],
-                capture_output=True, text=True, timeout=60, cwd='/workspaces/MMECO'
+                capture_output=True, text=True, timeout=60, cwd='/Users/nunocunha/Documents/GitHub/MMECO'
             )
             
             if result.returncode != 0:

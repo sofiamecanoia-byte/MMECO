@@ -2,35 +2,18 @@
   "E0599": {
     "error_key": "E0599",
     "error_code": "E0599",
-    "original_message": "error[E0599]: the function or associated item `execute_block` exists for struct `Executive<Runtime, Block<Header<u32, ...>, ...>, ..., ..., ...>`, but its trait bounds were not satisfied\nbuild\tUNKNOWN STEP\t2026-03-",
+    "original_message": "error[E0599]: the function or associated item `execute_block` exists for struct `Executive<Runtime, Block<Header<u32, ...>, ...>, ..., ..., ...>`, but its trait bounds were not satisfied\nbuild\tCompilar Node (Build ",
     "solution": "Aguardando análise",
-    "context": "GitHub Actions build #23391564181",
+    "context": "GitHub Actions build #23411586204",
     "count": 1,
-    "first_seen": "2026-03-22T13:30:31.128729",
-    "last_seen": "2026-03-22T13:30:31.128729",
+    "first_seen": "2026-03-22T20:36:32.465410",
+    "last_seen": "2026-03-22T20:36:32.465410",
     "resolved": true,
     "confidence": 0.8,
     "categories": [
       "Substrate Storage"
     ],
     "related_errors": [],
-    "last_updated": "2026-03-22T13:30:31.128729"
-  },
-  "E0437": {
-    "error_key": "E0437",
-    "error_code": "E0437",
-    "original_message": "error[E0437]: type `Header` is not a member of trait `polkadot_sdk::frame_system::Config`\nbuild\tCompilar Node (Build Completo)\t2026-03-22T13:56:00.2512399Z     --> /home/runner/work/MMECO/MMECO/blockchain-core/runt",
-    "solution": "Aguardando análise",
-    "context": "GitHub Actions build #23404218106",
-    "count": 1,
-    "first_seen": "2026-03-22T14:00:07.382751",
-    "last_seen": "2026-03-22T14:00:07.382751",
-    "resolved": true,
-    "confidence": 0.8,
-    "categories": [
-      "Substrate Pallet"
-    ],
-    "related_errors": [],
-    "last_updated": "2026-03-22T14:00:07.382751"
+    "last_updated": "2026-03-22T20:36:32.465410"
   }
 }
