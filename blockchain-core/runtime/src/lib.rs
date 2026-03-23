@@ -20,6 +20,9 @@ use polkadot_sdk::frame_support::{
     traits::{ConstU128, ConstU16, ConstU32, ConstU64, Everything},
 };
 
+// CORREÇÃO CRÍTICA PARA E0599 (stable2412)
+use polkadot_sdk::frame_executive::traits::ExecuteBlock;
+
 pub use pallet_reputation;
 pub use pallet_projects;
 pub use pallet_governance;
@@ -53,7 +56,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     impl_version: 1,
     apis: polkadot_sdk::sp_version::create_apis_vec!([]),
     transaction_version: 1,
-    system_version: 1, // CORREÇÃO 1: Substituído state_version por system_version
+    system_version: 1,
 };
 
 parameter_types! {
@@ -98,8 +101,6 @@ impl polkadot_sdk::frame_system::Config for Runtime {
     type SS58Prefix = ConstU16<42>;
     type OnSetCode = ();
     type MaxConsumers = ConstU32<16>;
-    
-    // CORREÇÃO 2: Adicionados os itens em falta pedidos pelo compilador
     type ExtensionsWeightInfo = ();
     type SingleBlockMigrations = ();
     type MultiBlockMigrator = ();
@@ -129,8 +130,6 @@ impl polkadot_sdk::pallet_balances::Config for Runtime {
     type MaxFreezes = ConstU32<50>;
     type RuntimeHoldReason = RuntimeHoldReason;
     type RuntimeFreezeReason = RuntimeFreezeReason;
-    
-    // CORREÇÃO 3: Adicionado o manipulador em falta
     type DoneSlashHandler = (); 
 }
 
@@ -270,7 +269,6 @@ impl_runtime_apis! {
         }
 
         fn submit_report_equivocation_unsigned_extrinsic(
-            // CORREÇÃO 4: Inserido o sinal < em falta aqui
             _equivocation_proof: polkadot_sdk::sp_consensus_grandpa::EquivocationProof<
                 <Block as BlockT>::Hash,
                 BlockNumber,
