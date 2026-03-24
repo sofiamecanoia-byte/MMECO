@@ -5,16 +5,16 @@
     "original_message": "error[E0599]: the function or associated item `execute_block` exists for struct `Executive<Runtime, Block<Header<u32, ...>, ...>, ..., ..., ...>`, but its trait bounds were not satisfied\nbuild\tCompilar Node (Build ",
     "solution": "REQUIRES_FIX: Needs investigation and code changes",
     "context": "GitHub Actions build #23411586204",
-    "count": 8,
+    "count": 9,
     "first_seen": "2026-03-22T20:36:32.465410",
-    "last_seen": "2026-03-24T21:58:31.578522",
+    "last_seen": "2026-03-24T22:47:43.188357",
     "resolved": true,
     "confidence": 0.8,
     "categories": [
       "Substrate Storage"
     ],
     "related_errors": [],
-    "last_updated": "2026-03-24T21:58:31.578522"
+    "last_updated": "2026-03-24T22:47:43.188357"
   },
   "E0432": {
     "error_key": "E0432",
