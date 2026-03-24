@@ -781,3 +781,206 @@
 **Contexto:** GitHub Actions build #23411586204
 
 ---
+
+## [2026-03-23 18:21:21] E0599
+
+**Mensagem:** E0599
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23411586204
+
+---
+
+
+## [2026-03-23 18:21:21] E0432
+
+**Mensagem:** E0432
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23452370970
+
+---
+
+## [2026-03-24 18:47:41] E0599
+
+**Mensagem:** E0599
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23411586204
+
+---
+
+
+## [2026-03-24 18:47:41] E0432
+
+**Mensagem:** E0432
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23452370970
+
+---
+
+## [2026-03-24 19:16:39] E0599
+
+**Mensagem:** E0599
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23411586204
+
+---
+
+
+## [2026-03-24 19:16:39] E0432
+
+**Mensagem:** E0432
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23452370970
+
+---
+
+## [2026-03-24 19:24:42] E0599
+
+**Mensagem:** E0599
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23411586204
+
+---
+
+
+## [2026-03-24 19:24:42] E0432
+
+**Mensagem:** E0432
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23452370970
+
+---
+
+## [2026-03-24 20:18:24] E0599
+
+**Mensagem:** E0599
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23411586204
+
+---
+
+
+## [2026-03-24 20:18:24] E0432
+
+**Mensagem:** E0432
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23452370970
+
+---
+
+## [2026-03-24 20:58:33] E0599
+
+**Mensagem:** E0599
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23411586204
+
+---
+
+
+## [2026-03-24 20:58:33] E0432
+
+**Mensagem:** E0432
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23452370970
+
+---
+
+## [2026-03-24 21:25:29] E0599
+
+**Mensagem:** E0599
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23411586204
+
+---
+
+
+## [2026-03-24 21:25:29] E0432
+
+**Mensagem:** E0432
+
+**Localização:** Desconhecido:?
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+**Contexto:** GitHub Actions build #23452370970
+
+---

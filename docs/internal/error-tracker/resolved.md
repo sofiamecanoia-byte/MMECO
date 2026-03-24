@@ -148,3 +148,56 @@ Aguardando análise
 **Confiança:** 80%
 
 ---
+
+## [2026-03-23] E0432
+
+**Problema:** E0432
+
+**Solução:**
+Aguardando análise
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+---
+
+## [2026-03-24] E0599
+
+**Problema:** E0599
+
+**Solução:**
+Aguardando análise
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+---
+
+
+## [2026-03-24] E0432
+
+**Problema:** E0432
+
+**Solução:**
+Aguardando análise
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+---
+
+## [2026-03-24] E0599
+
+**Problema:** E0599
+
+**Solução:**
+REQUIRES_FIX: Needs investigation and code changes
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+---

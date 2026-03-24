@@ -3,17 +3,34 @@
     "error_key": "E0599",
     "error_code": "E0599",
     "original_message": "error[E0599]: the function or associated item `execute_block` exists for struct `Executive<Runtime, Block<Header<u32, ...>, ...>, ..., ..., ...>`, but its trait bounds were not satisfied\nbuild\tCompilar Node (Build ",
-    "solution": "Aguardando análise",
+    "solution": "REQUIRES_FIX: Needs investigation and code changes",
     "context": "GitHub Actions build #23411586204",
-    "count": 1,
+    "count": 3,
     "first_seen": "2026-03-22T20:36:32.465410",
-    "last_seen": "2026-03-22T20:36:32.465410",
+    "last_seen": "2026-03-24T21:26:52.696397",
     "resolved": true,
     "confidence": 0.8,
     "categories": [
       "Substrate Storage"
     ],
     "related_errors": [],
-    "last_updated": "2026-03-22T20:36:32.465410"
+    "last_updated": "2026-03-24T21:26:52.696397"
+  },
+  "E0432": {
+    "error_key": "E0432",
+    "error_code": "E0432",
+    "original_message": "error[E0432]: unresolved import `polkadot_sdk::sp_runtime::traits::ExecuteBlock`\nbuild\tCompilar Node (Build Completo)\t2026-03-23T18:19:07.2129225Z     --> /home/runner/work/MMECO/MMECO/blockchain-core/runtime/src/l",
+    "solution": "Aguardando análise",
+    "context": "GitHub Actions build #23452370970",
+    "count": 1,
+    "first_seen": "2026-03-23T18:21:21.933152",
+    "last_seen": "2026-03-23T18:21:21.933152",
+    "resolved": true,
+    "confidence": 0.8,
+    "categories": [
+      "Imports e Módulos"
+    ],
+    "related_errors": [],
+    "last_updated": "2026-03-23T18:21:21.933152"
   }
 }
