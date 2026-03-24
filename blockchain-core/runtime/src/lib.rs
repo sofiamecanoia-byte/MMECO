@@ -177,8 +177,8 @@ impl_runtime_apis! {
             VERSION
         }
 
-        fn Executive::execute_block(block: Block) {
-            Executive::Executive::execute_block(block)
+        fn Executive::Executive::execute_block(block: Block) {
+            Executive::Executive::Executive::execute_block(block)
         }
 
         fn initialize_block(header: &<Block as BlockT>::Header) -> polkadot_sdk::sp_runtime::ExtrinsicInclusionMode {
