@@ -201,3 +201,44 @@ REQUIRES_FIX: Needs investigation and code changes
 **Confiança:** 80%
 
 ---
+
+## [2026-03-27] E0599
+
+**Problema:** E0599
+
+**Solução:**
+RESOLVED: Fixed imports - added 'generic' and removed 'ExecuteBlock'
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 100%
+
+---
+
+
+## [2026-03-27] E0432
+
+**Problema:** E0432
+
+**Solução:**
+RESOLVED: Fixed imports - added 'generic' and removed 'ExecuteBlock'
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 100%
+
+---
+
+
+## [2026-03-27] a7ae7836a3c08c10
+
+**Problema:** a7ae7836a3c08c10
+
+**Solução:**
+REQUIRES_FIX
+
+**Categorias:** Rust, Compilation
+
+**Confiança:** 80%
+
+---
