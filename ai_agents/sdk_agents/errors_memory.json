@@ -3,13 +3,13 @@
     "error_key": "E0599",
     "error_code": "E0599",
     "original_message": "error[E0599]: the function or associated item `execute_block` exists for struct `Executive<Runtime, Block<Header<u32, ...>, ...>, ..., ..., ...>`, but its trait bounds were not satisfied\nbuild\tCompilar Node (Build ",
-    "solution": "REQUIRES_FIX: Needs investigation and code changes",
+    "solution": "RESOLVED: Fixed imports - added 'generic' and removed 'ExecuteBlock'",
     "context": "GitHub Actions build #23411586204",
     "count": 9,
     "first_seen": "2026-03-22T20:36:32.465410",
     "last_seen": "2026-03-24T22:47:43.188357",
     "resolved": true,
-    "confidence": 0.8,
+    "confidence": 1.0,
     "categories": [
       "Substrate Storage"
     ],
@@ -20,17 +20,34 @@
     "error_key": "E0432",
     "error_code": "E0432",
     "original_message": "error[E0432]: unresolved import `polkadot_sdk::sp_runtime::traits::ExecuteBlock`\nbuild\tCompilar Node (Build Completo)\t2026-03-23T18:19:07.2129225Z     --> /home/runner/work/MMECO/MMECO/blockchain-core/runtime/src/l",
-    "solution": "Aguardando análise",
+    "solution": "RESOLVED: Fixed imports - added 'generic' and removed 'ExecuteBlock'",
     "context": "GitHub Actions build #23452370970",
     "count": 1,
     "first_seen": "2026-03-23T18:21:21.933152",
     "last_seen": "2026-03-23T18:21:21.933152",
+    "resolved": true,
+    "confidence": 1.0,
+    "categories": [
+      "Imports e Módulos"
+    ],
+    "related_errors": [],
+    "last_updated": "2026-03-23T18:21:21.933152"
+  },
+  "a7ae7836a3c08c10": {
+    "error_key": "a7ae7836a3c08c10",
+    "error_code": null,
+    "original_message": "error[0433]: failed to resolve: use of unresolved module or unlinked crate `polkadot_sdk`",
+    "solution": "REQUIRES_FIX",
+    "context": "build 23517393494",
+    "count": 5,
+    "first_seen": "2026-03-25T00:07:54.366243",
+    "last_seen": "2026-03-25T00:07:54.371953",
     "resolved": true,
     "confidence": 0.8,
     "categories": [
       "Imports e Módulos"
     ],
     "related_errors": [],
-    "last_updated": "2026-03-23T18:21:21.933152"
+    "last_updated": "2026-03-25T00:07:54.371953"
   }
 }
