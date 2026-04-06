@@ -58,6 +58,7 @@ pub mod pallet {
     #[pallet::call]
     impl<T: Config> Pallet<T> {
 
+        #[pallet::call_index(0)]
         #[pallet::weight(10_000)]
         pub fn contribute(
             origin: OriginFor<T>,
