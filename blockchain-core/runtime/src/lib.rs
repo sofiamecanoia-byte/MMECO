@@ -21,7 +21,7 @@ use polkadot_sdk::frame_support::{
 };
 
 // CORREÇÃO: Importação necessária para o SDK stable2412
-use sp_runtime::traits::ExecuteBlock;
+use polkadot_sdk::sp_runtime::traits::ExecuteBlock;
 
 pub use pallet_reputation;
 pub use pallet_projects;

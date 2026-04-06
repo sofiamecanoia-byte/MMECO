@@ -1,1 +1,12 @@
-{}
+{
+  "E0433": {
+    "error_code": "E0433",
+    "original_message": "   Compiling mmeco-runtime v0.1.0 (/Users/nunocunha/MMECO/blockchain-core/runtime)\nwarning: use of deprecated constant `pallet::warnings::ImplicitCallIndex_0::_w`: \n                 It is deprecated to use implicit call indices.\n                 Please instead ensure that all calls have a `pallet::call_index` attribute or put the pallet into `dev` mode.\n         \n                 For more info see:\n                     <https://github.com/paritytech/substrate/pull/12891>\n                     <ht",
+    "solution": "\n## 📋 Erro: E0433 - Imports e Módulos\n\n### 🔍 Explicação\nFalha ao resolver módulo. Problema com path ou feature flags.\n\n### ✅ Solução\nVerificar feature flags habilitado ou path do módulo.\n\n### 🔗 Substrate/Polkadot SDK\nEste é um erro comum no ecossistema Substrate.\n### 💡 Exemplo de Correção\n```rust\n\n# Em Cargo.toml:\n[features]\ndefault = [\"std\"]\nstd = [\n    \"frame-support/std\",\n    \"sp-std/std\",\n]\n\n```",
+    "context": "pallets/projects/src/lib.rs:62",
+    "count": 1,
+    "first_seen": "2026-04-06T17:42:48.468707",
+    "last_seen": "2026-04-06T17:42:48.468748",
+    "resolved": true
+  }
+}
