@@ -20,8 +20,8 @@ use polkadot_sdk::frame_support::{
     traits::{ConstU128, ConstU16, ConstU32, ConstU64, Everything},
 };
 
-// CORREÇÃO: Importação necessária para o SDK stable2412
-use polkadot_sdk::sp_runtime::traits::ExecuteBlock;
+// CORREÇÃO: ExecuteBlock está disponível via frame_support no runtime
+// Não é necessário import direto - o Executive já usa corretamente
 
 pub use pallet_reputation;
 pub use pallet_projects;
@@ -177,8 +177,8 @@ impl_runtime_apis! {
             VERSION
         }
 
-        fn Executive::Executive::Executive::Executive::execute_block(block: Block) {
-            Executive::Executive::Executive::Executive::Executive::execute_block(block)
+        fn execute_block(block: Block) {
+            Executive::execute_block(block)
         }
 
         fn initialize_block(header: &<Block as BlockT>::Header) -> polkadot_sdk::sp_runtime::ExtrinsicInclusionMode {

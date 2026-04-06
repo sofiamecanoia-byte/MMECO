@@ -8,5 +8,15 @@
     "first_seen": "2026-04-06T17:42:48.468707",
     "last_seen": "2026-04-06T17:42:48.468748",
     "resolved": true
+  },
+  "E0432": {
+    "error_code": "E0432",
+    "original_message": "   Compiling mmeco-runtime v0.1.0 (/Users/nunocunha/MMECO/blockchain-core/runtime)\nwarning: associated function `deposit_event` is never used\n  --> pallets/governance/src/lib.rs:20:46\n   |\n20 |     #[pallet::generate_deposit(pub(super) fn deposit_event)]\n   |                                              ^^^^^^^^^^^^^ associated function in this implementation\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: use of deprecated constant `pallet::warnings::ImplicitCallIndex_0::_w`: \n    ",
+    "solution": "\n## 📋 Erro: E0432 - Imports e Módulos\n\n### 🔍 Explicação\nMódulo ou import não encontrado. Verificar Cargo.toml e path.\n\n### ✅ Solução\nVerificar que o crate está em Cargo.toml e o caminho está correto.\n\n### 🔗 Substrate/Polkadot SDK\nEste é um erro comum no ecossistema Substrate.\n### 💡 Exemplo de Correção\n```rust\n\n# Verificar em Cargo.toml:\n[dependencies]\nframe-support = { git = \"...\", tag = \"...\" }\n\n# Import correto:\nuse frame_support::{dispatch, traits::Everything};\n\n```",
+    "context": "pallets/governance/src/lib.rs:20",
+    "count": 1,
+    "first_seen": "2026-04-06T18:07:35.905862",
+    "last_seen": "2026-04-06T18:07:35.905896",
+    "resolved": true
   }
 }
