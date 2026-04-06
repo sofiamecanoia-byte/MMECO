@@ -85,11 +85,29 @@ class BlockchainMemory:
         self.save_memory()
     
     def _hash_error(self, error_msg: str) -> str:
-        """Cria hash para erros sem código."""
+        """Cria hash ESTÁVEL para erros sem código (SHA256 com normalização)."""
         import hashlib
-        # Usar primeiras 100 chars + palavras-chave
-        key_part = ' '.join(error_msg.split()[:10])
-        return hashlib.md5(key_part.encode()).hexdigest()[:16]
+        import re
+        
+        # Extrair código de erro se existir
+        code_match = re.search(r'\bE\d{4}\b', error_msg)
+        error_code = code_match.group(0) if code_match else "NONE"
+        
+        # Extrair localização (ficheiro:linha)
+        loc_match = re.search(r'-->\s+([^\s:]+):(\d+)', error_msg)
+        if loc_match:
+            location = f"{loc_match.group(1)}:{loc_match.group(2)}"
+        else:
+            location = "unknown:0"
+        
+        # Normalizar mensagem (remover números variáveis, whitespace)
+        normalized = error_msg.lower().strip()
+        normalized = re.sub(r'\d+', 'N', normalized)  # substituir números por 'N'
+        normalized = re.sub(r'\s+', ' ', normalized)   # normalizar whitespace
+        
+        # Criar chave estável com campos consistentes
+        key = f"{error_code}|{location}|{normalized[:200]}"
+        return hashlib.sha256(key.encode()).hexdigest()[:32]
     
     def search_solution(self, error_msg: str) -> Optional[Dict]:
         """

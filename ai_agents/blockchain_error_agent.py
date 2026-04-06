@@ -38,6 +38,7 @@ class BlockchainErrorAgent:
     def __init__(self, project_path: str = "blockchain-core"):
         self.project_path = Path(project_path)
         self.memory = get_blockchain_memory()
+        self.last_output = None  # Controlo de loops redundantes
         self.emoji = {
             "error": "🔴",
             "warning": "🟡",
@@ -139,6 +140,23 @@ class BlockchainErrorAgent:
                 'success': False,
                 'errors': [],
                 'summary': 'Cargo não encontrado. Instalar Rust?'
+            }
+        
+        # Controlo de loops redundantes - evitar reprocessar mesmo output
+        if self.last_output == output:
+            return {
+                'success': False,
+                'errors': [],
+                'summary': 'Output duplicado - skipping'
+            }
+        self.last_output = output
+        
+        # Guarda: só processar se houver erro no build
+        if result.returncode == 0:
+            return {
+                'success': True,
+                'errors': [],
+                'summary': 'Build bem sucedido!'
             }
         
         # Parse erros
