@@ -66,14 +66,13 @@ pub mod pallet {
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            Contributions::<T>::try_mutate(project_id, |list| {
-                list.try_push(ContributionRecord {
+            Contributions::<T>::mutate(project_id, |list| {
+                let _ = list.try_push(ContributionRecord {
                     account: who.clone(),
                     project_id,
                     amount,
-                })
-            })?;
-
+                });
+            });
             Ok(())
         }
     }
