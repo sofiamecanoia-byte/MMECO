@@ -1,12 +1,1 @@
-{
-  "39c15c502cb96944": {
-    "error_code": null,
-    "original_message": "error: unexpected argument '2>&1' found\n\nUsage: cargo build [OPTIONS]\n\nFor more information, try '--help'.\n",
-    "solution": "\n## 📋 Erro: E0308 - Tipos e Traits\n\n### 🔍 Explicação\nTipos incompatíveis. Problema comum com tipos de peso (Weight) e Balance.\n\n### ✅ Solução\nConverter explicitamente ou usar método correto (e.g., .into(), .saturated_into())\n\n### 🔗 Substrate/Polkadot SDK\nEste é um erro comum no ecossistema Substrate.\n### 💡 Exemplo de Correção\n```rust\n\n# Para Weight:\n<T as frame_system::Config>::BlockWeights::get().max_block\n\n# Para Balance:\n<T::Currency as Currency<AccountId>>::free_balance(&account)\n\n```",
-    "context": "None:None",
-    "count": 1,
-    "first_seen": "2026-04-06T15:47:22.723904",
-    "last_seen": "2026-04-06T15:47:22.723917",
-    "resolved": true
-  }
-}
+{}

@@ -119,7 +119,7 @@ class BlockchainErrorAgent:
         try:
             # Executar build
             result = subprocess.run(
-                ["cargo", "build", "2>&1"],
+                ["cargo", "build"],
                 cwd=self.project_path,
                 capture_output=True,
                 text=True,
