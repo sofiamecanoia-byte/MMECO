@@ -1,57 +1,45 @@
-//! Nó Moral Money - Reconstrução Polkadot SDK 2025
-//! Este ficheiro inicia o serviço real da blockchain, ligando o Runtime e as Paletes.
-
 use clap::Parser;
-use polkadot_sdk::sc_cli::{SubstrateCli, RuntimeVersion, ChainSpec};
+use polkadot_sdk::sc_cli::{SubstrateCli, ChainSpec};
+mod chain_spec;
+mod service;
 
-// Estrutura de CLI do Substrate Moderno
 #[derive(Parser, Debug)]
 pub struct Cli {
-	#[command(subcommand)]
-	pub subcommand: Option<Subcommand>,
-
-	#[clap(flatten)]
-	pub run: polkadot_sdk::sc_cli::RunCmd,
+    #[command(subcommand)]
+    pub subcommand: Option<Subcommand>,
+    #[clap(flatten)]
+    pub run: polkadot_sdk::sc_cli::RunCmd,
 }
 
 #[derive(Parser, Debug)]
 pub enum Subcommand {
-	/// Limpa a base de dados
-	PurgeChain(polkadot_sdk::sc_cli::PurgeChainCmd),
-	/// Exporta o estado para JSON
-	CheckBlock(polkadot_sdk::sc_cli::CheckBlockCmd),
+    PurgeChain(polkadot_sdk::sc_cli::PurgeChainCmd),
 }
 
-// Implementação obrigatória para o SDK reconhecer o teu nó
 impl SubstrateCli for Cli {
-	fn impl_name() -> String { "Moral Money Node".into() }
-	fn impl_version() -> String { env!("CARGO_PKG_VERSION").into() }
-	fn description() -> String { "Blockchain MMECO com Polkadot SDK 2025".into() }
-	fn author() -> String { "Moral Money Team".into() }
-	fn support_url() -> String { "https://github.com/nuno/mmeco/issues".into() }
-	fn copyright_start_year() -> i32 { 2025 }
-	fn load_spec(&self, _id: &str) -> Result<Box<dyn ChainSpec>, String> {
-		// Amanhã criamos o ChainSpec real (os parâmetros da rede)
-		Err("ChainSpec ainda não configurado. Passo seguinte!".into())
-	}
+    fn impl_name() -> String { "Moral Money Node".into() }
+    fn impl_version() -> String { env!("CARGO_PKG_VERSION").into() }
+    fn description() -> String { "Blockchain MMECO".into() }
+    fn author() -> String { "Moral Money Team".into() }
+    fn support_url() -> String { "https://github.com/nuno/mmeco".into() }
+    fn copyright_start_year() -> i32 { 2026 }
+    fn load_spec(&self, id: &str) -> Result<Box<dyn ChainSpec>, String> {
+        Ok(Box::new(chain_spec::development_config()?))
+    }
 }
 
 fn main() -> polkadot_sdk::sc_cli::Result<()> {
-	let cli = Cli::parse();
-
-	match &cli.subcommand {
-		Some(Subcommand::PurgeChain(cmd)) => {
-			let runner = cli.create_runner(cmd)?;
-			runner.sync_run(|config| cmd.run(config.database))
-		},
-		None => {
-			let runner = cli.create_runner(&cli.run)?;
-			println!("🚀 Moral Money Node a arrancar com Polkadot SDK...");
-			// Aqui o runner iniciaria o serviço completo
-			runner.run_node_until_exit(|_config| async move {
-				Ok(())
-			})
-		},
-		_ => Ok(()),
-	}
+    let cli = Cli::parse();
+    match &cli.subcommand {
+        Some(Subcommand::PurgeChain(cmd)) => {
+            let runner = cli.create_runner(cmd)?;
+            runner.sync_run(|config| cmd.run(config.database))
+        },
+        None => {
+            let runner = cli.create_runner(&cli.run)?;
+            runner.run_node_until_exit(|config| async move {
+                service::new_full(config).map_err(polkadot_sdk::sc_cli::Error::Service)
+            })
+        },
+    }
 }

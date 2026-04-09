@@ -2,42 +2,71 @@
 
 pub use pallet::*;
 
-#[frame_support::pallet]
+#[polkadot_sdk::frame_support::pallet]
 pub mod pallet {
-    use frame_support::pallet_prelude::*;
-    use frame_system::pallet_prelude::*;
+    use polkadot_sdk::frame_support::pallet_prelude::*;
+    use polkadot_sdk::frame_system::pallet_prelude::*;
 
     #[pallet::config]
-    pub trait Config: frame_system::Config {
-        /// O tipo de evento que a blockchain vai emitir.
-        type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+    pub trait Config: polkadot_sdk::frame_system::Config {
+        type RuntimeEvent: From<Event<Self>> + IsType<<Self as polkadot_sdk::frame_system::Config>::RuntimeEvent>;
     }
 
     #[pallet::pallet]
     pub struct Pallet<T>(_);
 
+    #[pallet::storage]
+    #[pallet::getter(fn proposal_count)]
+    pub type ProposalCount<T> = StorageValue<_, u32, ValueQuery>;
+
+    #[pallet::storage]
+    #[pallet::getter(fn proposal_owners)]
+    pub type ProposalOwners<T: Config> = StorageMap<_, Blake2_128Concat, u32, T::AccountId, OptionQuery>;
+
+    #[pallet::storage]
+    #[pallet::getter(fn votes)]
+    pub type Votes<T> = StorageMap<_, Blake2_128Concat, u32, u32, ValueQuery>;
+
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
-        /// Evento disparado quando uma nova proposta é criada.
-        /// [id_da_proposta]
-        ProposalCreated { proposal_id: u32 },
+        ProposalCreated { who: T::AccountId, proposal_id: u32 },
+        Voted { who: T::AccountId, proposal_id: u32 },
     }
 
-    // Estrutura base de erros para a palete de governança
     #[pallet::error]
     pub enum Error<T> {
-        /// Exemplo: A proposta não foi encontrada
+        StorageOverflow,
         ProposalNotFound,
-        /// Exemplo: A votação para esta proposta já encerrou
-        VotingClosed,
     }
-
-    #[pallet::hooks]
-    impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        // As tuas funções (extrinsics) para criar propostas e votar entram aqui.
+        #[pallet::call_index(0)]
+        #[pallet::weight(Weight::default())]
+        pub fn create_proposal(origin: OriginFor<T>) -> DispatchResult {
+            let sender = ensure_signed(origin)?;
+            let new_id = ProposalCount::<T>::get().checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+            
+            ProposalCount::<T>::put(new_id);
+            ProposalOwners::<T>::insert(new_id, sender.clone());
+            
+            Self::deposit_event(Event::ProposalCreated { who: sender, proposal_id: new_id });
+            Ok(())
+        }
+
+        #[pallet::call_index(1)]
+        #[pallet::weight(Weight::default())]
+        pub fn vote(origin: OriginFor<T>, proposal_id: u32) -> DispatchResult {
+            let sender = ensure_signed(origin)?;
+            ensure!(proposal_id <= ProposalCount::<T>::get(), Error::<T>::ProposalNotFound);
+
+            let current_votes = Votes::<T>::get(proposal_id);
+            let new_votes = current_votes.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
+            Votes::<T>::insert(proposal_id, new_votes);
+
+            Self::deposit_event(Event::Voted { who: sender, proposal_id });
+            Ok(())
+        }
     }
 }
