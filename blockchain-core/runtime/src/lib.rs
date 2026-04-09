@@ -10,10 +10,11 @@ use alloc::vec::Vec;
 use polkadot_sdk::sp_std::borrow::Cow;
 use polkadot_sdk::sp_api::impl_runtime_apis;
 use polkadot_sdk::sp_runtime::{
-    generic,
+    generic, impl_opaque_keys,
     traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, Verify},
     MultiSignature,
 };
+use polkadot_sdk::frame_support::inherent::ProvideInherent;
 use polkadot_sdk::sp_version::RuntimeVersion;
 use polkadot_sdk::frame_support::{
     construct_runtime, parameter_types,
@@ -27,6 +28,8 @@ pub use pallet_reputation;
 pub use pallet_projects;
 pub use pallet_governance;
 
+pub mod genesis_config_presets;
+
 pub type Signature = MultiSignature;
 pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 pub type Balance = u128;
@@ -35,10 +38,30 @@ pub type Hash = polkadot_sdk::sp_core::H256;
 pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 pub type Nonce = u32;
 
-pub type TxExtension = ();
+pub type TxExtension = (
+    polkadot_sdk::frame_system::CheckNonZeroSender<Runtime>,
+    polkadot_sdk::frame_system::CheckSpecVersion<Runtime>,
+    polkadot_sdk::frame_system::CheckTxVersion<Runtime>,
+    polkadot_sdk::frame_system::CheckGenesis<Runtime>,
+    polkadot_sdk::frame_system::CheckEra<Runtime>,
+    polkadot_sdk::frame_system::CheckNonce<Runtime>,
+    polkadot_sdk::frame_system::CheckWeight<Runtime>,
+);
 
-pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<AccountId, RuntimeCall, Signature, TxExtension>;
+pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<
+    polkadot_sdk::sp_runtime::MultiAddress<AccountId, ()>,
+    RuntimeCall,
+    Signature,
+    TxExtension,
+>;
 pub type Block = generic::Block<Header, UncheckedExtrinsic>;
+
+impl_opaque_keys! {
+    pub struct SessionKeys {
+        pub aura: Aura,
+        pub grandpa: Grandpa,
+    }
+}
 
 #[polkadot_sdk::sp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
@@ -47,7 +70,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     authoring_version: 1,
     spec_version: 1,
     impl_version: 1,
-    apis: polkadot_sdk::sp_version::create_apis_vec!([]),
+    apis: RUNTIME_API_VERSIONS,
     transaction_version: 1,
     system_version: 1,
 };
@@ -162,7 +185,6 @@ type Executive = polkadot_sdk::frame_executive::Executive<
     polkadot_sdk::frame_system::ChainContext<Runtime>,
     Runtime,
     AllPalletsWithSystem,
-    TxExtension,
 >;
 
 impl_runtime_apis! {
@@ -172,11 +194,11 @@ impl_runtime_apis! {
         }
 
         fn execute_block(block: Block) {
-            // Temporary skip - Checkable trait issue on stable2412
+            Executive::execute_block(block);
         }
 
         fn initialize_block(header: &<Block as BlockT>::Header) -> polkadot_sdk::sp_runtime::ExtrinsicInclusionMode {
-            Default::default()
+            Executive::initialize_block(header)
         }
     }
 
@@ -195,63 +217,74 @@ impl_runtime_apis! {
     }
 
     impl polkadot_sdk::sp_block_builder::BlockBuilder<Block> for Runtime {
-        fn apply_extrinsic(_extrinsic: <Block as BlockT>::Extrinsic) -> polkadot_sdk::sp_runtime::ApplyExtrinsicResult {
-            Ok(Ok(()))
+        fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> polkadot_sdk::sp_runtime::ApplyExtrinsicResult {
+            Executive::apply_extrinsic(extrinsic)
         }
 
         fn finalize_block() -> <Block as BlockT>::Header {
-            Header {
-                parent_hash: Default::default(),
-                number: 0,
-                state_root: Default::default(),
-                extrinsics_root: Default::default(),
-                digest: Default::default(),
-            }
+            Executive::finalize_block()
         }
 
-        fn inherent_extrinsics(_data: polkadot_sdk::sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
-            Vec::new()
+        fn inherent_extrinsics(data: polkadot_sdk::sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+            let mut inherents = Vec::new();
+
+            if let Some(call) = polkadot_sdk::pallet_timestamp::Pallet::<Runtime>::create_inherent(&data) {
+                let ext = UncheckedExtrinsic::new_bare(RuntimeCall::Timestamp(call));
+                inherents.push(ext);
+            }
+
+            inherents
         }
 
         fn check_inherents(
-            _block: Block,
-            _data: polkadot_sdk::sp_inherents::InherentData,
+            block: Block,
+            data: polkadot_sdk::sp_inherents::InherentData,
         ) -> polkadot_sdk::sp_inherents::CheckInherentsResult {
-            Default::default()
+            let mut result = polkadot_sdk::sp_inherents::CheckInherentsResult::new();
+
+            for ext in block.extrinsics().iter() {
+                if let RuntimeCall::Timestamp(call) = &ext.function {
+                    if let Err(e) = polkadot_sdk::pallet_timestamp::Pallet::<Runtime>::check_inherent(call, &data) {
+                        let _ = result.put_error(polkadot_sdk::sp_timestamp::INHERENT_IDENTIFIER, &e);
+                    }
+                }
+            }
+
+            result
         }
     }
 
     impl polkadot_sdk::sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
         fn validate_transaction(
-            _source: polkadot_sdk::sp_runtime::transaction_validity::TransactionSource,
-            _tx: <Block as BlockT>::Extrinsic,
-            _block_hash: <Block as BlockT>::Hash,
+            source: polkadot_sdk::sp_runtime::transaction_validity::TransactionSource,
+            tx: <Block as BlockT>::Extrinsic,
+            block_hash: <Block as BlockT>::Hash,
         ) -> polkadot_sdk::sp_runtime::transaction_validity::TransactionValidity {
-            Ok(Default::default())
+            Executive::validate_transaction(source, tx, block_hash)
         }
     }
 
     impl polkadot_sdk::sp_offchain::OffchainWorkerApi<Block> for Runtime {
-        fn offchain_worker(_header: &<Block as BlockT>::Header) {
-            // Temporary skip - Checkable trait issue on stable2412
+        fn offchain_worker(header: &<Block as BlockT>::Header) {
+            Executive::offchain_worker(header)
         }
     }
 
     impl polkadot_sdk::sp_session::SessionKeys<Block> for Runtime {
-        fn generate_session_keys(_seed: Option<Vec<u8>>) -> Vec<u8> {
-            Default::default()
+        fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
+            SessionKeys::generate(seed)
         }
 
         fn decode_session_keys(
-            _encoded: Vec<u8>,
+            encoded: Vec<u8>,
         ) -> Option<Vec<(Vec<u8>, polkadot_sdk::sp_core::crypto::KeyTypeId)>> {
-            None
+            SessionKeys::decode_into_raw_public_keys(&encoded)
         }
     }
 
     impl polkadot_sdk::sp_consensus_aura::AuraApi<Block, polkadot_sdk::sp_consensus_aura::sr25519::AuthorityId> for Runtime {
         fn slot_duration() -> polkadot_sdk::sp_consensus_aura::SlotDuration {
-            polkadot_sdk::sp_consensus_aura::SlotDuration::from_millis(6000)
+            polkadot_sdk::sp_consensus_aura::SlotDuration::from_millis(Aura::slot_duration())
         }
 
         fn authorities() -> Vec<polkadot_sdk::sp_consensus_aura::sr25519::AuthorityId> {
@@ -283,6 +316,24 @@ impl_runtime_apis! {
             _authority_id: polkadot_sdk::sp_consensus_grandpa::AuthorityId,
         ) -> Option<polkadot_sdk::sp_consensus_grandpa::OpaqueKeyOwnershipProof> {
             None
+        }
+    }
+
+    impl polkadot_sdk::sp_genesis_builder::GenesisBuilder<Block> for Runtime {
+        fn build_state(config: Vec<u8>) -> polkadot_sdk::sp_genesis_builder::Result {
+            crate::sp_api_hidden_includes_construct_runtime::hidden_include::genesis_builder_helper::build_state::<
+                RuntimeGenesisConfig,
+            >(config)
+        }
+
+        fn get_preset(id: &Option<polkadot_sdk::sp_genesis_builder::PresetId>) -> Option<Vec<u8>> {
+            crate::sp_api_hidden_includes_construct_runtime::hidden_include::genesis_builder_helper::get_preset::<
+                RuntimeGenesisConfig,
+            >(id, crate::genesis_config_presets::get_preset)
+        }
+
+        fn preset_names() -> Vec<polkadot_sdk::sp_genesis_builder::PresetId> {
+            crate::genesis_config_presets::preset_names()
         }
     }
 }

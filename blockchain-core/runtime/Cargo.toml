@@ -11,6 +11,7 @@ polkadot-sdk = { workspace = true, features = ["runtime", "pallet-aura", "pallet
 # Codificação base (Sincronizado com o Workspace)
 parity-scale-codec = { workspace = true }
 scale-info = { workspace = true }
+serde_json = { workspace = true, default-features = false, features = ["alloc"] }
 
 # As tuas paletes personalizadas
 pallet-reputation = { path = "../pallets/reputation", default-features = false }
@@ -27,6 +28,7 @@ std = [
     "pallet-transaction-payment/std",
     "parity-scale-codec/std",
     "scale-info/std",
+    "serde_json/std",
     "polkadot-sdk/std",
     "polkadot-sdk/pallet-balances",
     "pallet-reputation/std",

@@ -12,6 +12,8 @@ tokio = { version = "1.36", features = ["full"] }
 anyhow = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 hex-literal = "0.4.1"
+futures = { version = "0.3", features = ["thread-pool"] }
+jsonrpsee = { workspace = true, features = ["server"] }
 
 # Substrate Client - Polkadot SDK 2025
 sc-cli = { workspace = true }
@@ -25,6 +27,9 @@ sc-consensus-aura = { workspace = true }
 sc-consensus-grandpa = { workspace = true }
 sc-transaction-pool = { workspace = true }
 sc-transaction-pool-api = { workspace = true }
+sc-telemetry = { workspace = true }
+sc-offchain = { workspace = true }
+sc-basic-authorship = { workspace = true }
 
 # Polkadot SDK Stable2412
 polkadot-sdk = { workspace = true, features = ["runtime", "node"] }

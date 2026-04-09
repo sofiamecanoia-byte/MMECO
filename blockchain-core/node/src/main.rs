@@ -1,6 +1,9 @@
 use clap::Parser;
-use polkadot_sdk::sc_cli::{SubstrateCli, ChainSpec};
+use polkadot_sdk::sc_cli::{ChainSpec, SubstrateCli};
+use std::path::PathBuf;
+
 mod chain_spec;
+mod rpc;
 mod service;
 
 #[derive(Parser, Debug)]
@@ -24,7 +27,14 @@ impl SubstrateCli for Cli {
     fn support_url() -> String { "https://github.com/nuno/mmeco".into() }
     fn copyright_start_year() -> i32 { 2026 }
     fn load_spec(&self, id: &str) -> Result<Box<dyn ChainSpec>, String> {
-        Ok(Box::new(chain_spec::development_config()?))
+        match id {
+            "dev" | "development" | "" => Ok(Box::new(chain_spec::development_config()?)),
+            "local" => Ok(Box::new(chain_spec::local_config()?)),
+            path => {
+                let path = PathBuf::from(path);
+                Ok(Box::new(chain_spec::ChainSpec::from_json_file(path)?))
+            }
+        }
     }
 }
 
@@ -38,7 +48,19 @@ fn main() -> polkadot_sdk::sc_cli::Result<()> {
         None => {
             let runner = cli.create_runner(&cli.run)?;
             runner.run_node_until_exit(|config| async move {
-                service::new_full(config).map_err(polkadot_sdk::sc_cli::Error::Service)
+                match config.network.network_backend {
+                    polkadot_sdk::sc_network::config::NetworkBackendType::Libp2p => {
+                        service::new_full::<polkadot_sdk::sc_network::NetworkWorker<
+                            mmeco_runtime::Block,
+                            <mmeco_runtime::Block as polkadot_sdk::sp_runtime::traits::Block>::Hash,
+                        >>(config)
+                        .map_err(polkadot_sdk::sc_cli::Error::Service)
+                    }
+                    polkadot_sdk::sc_network::config::NetworkBackendType::Litep2p => {
+                        service::new_full::<polkadot_sdk::sc_network::Litep2pNetworkBackend>(config)
+                            .map_err(polkadot_sdk::sc_cli::Error::Service)
+                    }
+                }
             })
         },
     }
