@@ -20,24 +20,36 @@ pub mod pallet {
     pub type ProposalCount<T> = StorageValue<_, u32, ValueQuery>;
 
     #[pallet::storage]
-    #[pallet::getter(fn proposal_owners)]
     pub type ProposalOwners<T: Config> = StorageMap<_, Blake2_128Concat, u32, T::AccountId, OptionQuery>;
 
     #[pallet::storage]
-    #[pallet::getter(fn votes)]
     pub type Votes<T> = StorageMap<_, Blake2_128Concat, u32, u32, ValueQuery>;
+
+    #[pallet::storage]
+    pub type UserVoted<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat, u32,
+        Blake2_128Concat, T::AccountId,
+        bool,
+        ValueQuery,
+    >;
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         ProposalCreated { who: T::AccountId, proposal_id: u32 },
-        Voted { who: T::AccountId, proposal_id: u32 },
+        Voted { voter: T::AccountId, proposal_id: u32 },
     }
 
+    // [PONTO 3 DO CLAUDE - Erros]
     #[pallet::error]
     pub enum Error<T> {
-        StorageOverflow,
+        /// O utilizador já votou nesta proposta.
+        AlreadyVoted,
+        /// A proposta especificada não existe.
         ProposalNotFound,
+        /// Erro de transbordamento de armazenamento.
+        StorageOverflow,
     }
 
     #[pallet::call]
@@ -58,14 +70,17 @@ pub mod pallet {
         #[pallet::call_index(1)]
         #[pallet::weight(Weight::default())]
         pub fn vote(origin: OriginFor<T>, proposal_id: u32) -> DispatchResult {
-            let sender = ensure_signed(origin)?;
-            ensure!(proposal_id <= ProposalCount::<T>::get(), Error::<T>::ProposalNotFound);
-
-            let current_votes = Votes::<T>::get(proposal_id);
-            let new_votes = current_votes.checked_add(1).ok_or(Error::<T>::StorageOverflow)?;
-            Votes::<T>::insert(proposal_id, new_votes);
-
-            Self::deposit_event(Event::Voted { who: sender, proposal_id });
+            let voter = ensure_signed(origin)?;
+            
+            ensure!(proposal_id <= ProposalCount::<T>::get() && proposal_id > 0, Error::<T>::ProposalNotFound);
+            ensure!(!UserVoted::<T>::get(proposal_id, &voter), Error::<T>::AlreadyVoted);
+            
+            UserVoted::<T>::insert(proposal_id, &voter, true);
+            Votes::<T>::mutate(proposal_id, |count| {
+                *count = count.saturating_add(1);
+            });
+            
+            Self::deposit_event(Event::Voted { voter, proposal_id });
             Ok(())
         }
     }
